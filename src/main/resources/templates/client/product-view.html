@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!--JQuery-->
+    <script src="jquery-3.7.1.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{|/client/css/index.css|}">
+    <link rel="stylesheet" th:href="@{|/client/css/product.css|}">
+    <title>Product</title>
+</head>
+
+<body>
+<div class="header">
+    <!-- background -->
+    <div class="bg-image">
+        <img th:src="@{|/client/images/utils/banner-product.jpg|}" alt="" class="w-100">
+        <!-- content -->
+        <div class="content">
+            <p class="content-main">All Products</p>
+            <ul class="justify-content-center d-flex ps-0">
+                <li><a href="">Home</a></li>
+                &nbsp &nbsp;//&nbsp&nbsp;
+                <li> Product</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Start navbar -->
+    <div th:replace="~{/client/layout/header::nav-header}"></div>
+</div>
+
+<div class="container p-5">
+    <div class="row">
+        <div class="col-lg-4 col-md-0">
+            <div class="cart">
+                <h2>Cart</h2>
+                <div class="cart-item mt-3">
+                    <!-- <h3 class="text-white">No product in the cart</h3> -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3" style="overflow: hidden;">
+                            <img th:src="@{|/client/images/products/product02.png|}" class="w-100" style="object-fit: cover;"
+                                 alt="">
+                        </div>
+                        <div class="col-md-9">
+                            <h2 class="name-product text-white">Honey Roasted Nuts</h2>
+                            <p><span class="quantity">1</span> x <span> 30$</span></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-12 text-center">
+                        <h2>Subtotal: <span class="total-price">30 $</span></h2>
+                    </div>
+                    <div class="btn-utils text-center mt-3">
+                        <button class="btn btn-custom me-2">View Cart</button>
+                        <button class="btn btn-custom ms-2">Check Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-12">
+            <div class="row">
+                <div class="col-md-12 d-flex p-2" style="justify-content: space-between;">
+                    <p class="doc-result-filter m-0">Showing 1–<span th:text="${size}"></span>&nbsp;of <span th:text="${totalElements}"></span> results</p>
+                    <form action="/products" method="get" id="form-select-limit-item">
+                        <label>
+                            <select class="p-2" id="select-limit-item">
+                                <option value="all" selected>Select number products</option>
+                                <option value="12">12 Product</option>
+                                <option value="30">30 Product</option>
+                                <option value="60">60 Product</option>
+                            </select>
+                        </label>
+                    </form>
+                </div>
+                <div class="col-md-4 col-sm-6" th:each="item:${products}">
+                    <div class="item mt-3 text-center">
+                        <div class="image-product">
+                            <a th:href="@{|/product-detail/${item.id}|}">
+                                <img th:src="@{|/client/images/products/product01.png|}" class="w-100" alt="">
+                            </a>
+                        </div>
+                        <div class="add-to-cart">
+                            <button class="btn button-add-cart btnAddToCart" th:attr="data-product-id=${item.id}" th:href="@{|/cart/add/${item.id}|}">Add To Cart</button>
+                        </div>
+                        <div class="content-product">
+                            <p class="name mt-3" th:text="${item.name}"> </p>
+                            <p class="price mt-3"><span th:text="${#numbers.formatDecimal(item.price,0,'POINT',2,'COMMA')}"></span><span> VND</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{|/products?page=${pageNo > 1 ? pageNo - 1 : 1}|}">
+                                <i class="ri-arrow-left-line"></i>
+                            </a>
+                        </li>
+                        <th:block th:if="${pageNo > 3 && size >5}">
+                            <li th:class="@{|page-item ${pageNo == page?'active':''}|}"
+                                th:each="page: ${#numbers.sequence((pageNo - 2 <= 0? 1 : pageNo - 2),(pageNo+2>size?size:pageNo + 2))}">
+                                <a class="page-link" th:href="@{|/products?page=${page}&limit=${limit}|}"><span th:text="${page}"></span></a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${pageNo <= 3 || size <= 5}">
+                            <li th:class="@{|page-item ${pageNo == page?'active':''}|}"
+                                th:each="page: ${#numbers.sequence(1,(pageNo+2 <= 5 || size < 5?(size < 5 ? size : 5):pageNo + 2))}">
+                                <a class="page-link" th:href="@{|/products?page=${page}&limit=${limit}|}"><span th:text="${page}"></span></a>
+                            </li>
+                        </th:block>
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{|/products?page=${pageNo lt size ? pageNo + 1 : size}&limit=${limit}|}">
+                                <i class=" ri-arrow-right-line"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cart-tab">
+    <div class="cart-tab-header mb-5">
+        <h2 class="m-0">My cart</h2>
+        <i class="ri-close-line close-btn"></i>
+    </div>
+    <div class="cart-tab-list">
+        <div class="card mb-3">
+            <span class="close"><i class="ri-close-line"></i></span>
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img th:src="@{|/client/images/products/product02.png|}" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title">Chocolate Covered Roast</h3>
+                        <div class="btn-quantity">
+                            <span class="plus"><i class="ri-add-line"></i></span>
+                            <span><input type="text" name="quantity" value="1"
+                                         class="form-control quantity"/></span>
+                            <span class="minus"><i class="ri-subtract-line"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <span class="close"><i class="ri-close-line"></i></span>
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img th:src="@{|/client/images/products/product02.png|}" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title">Chocolate Covered Roast</h3>
+                        <div class="btn-quantity">
+                            <span class="plus"><i class="ri-add-line"></i></span>
+                            <span><input type="text" name="quantity" value="1"
+                                         class="form-control quantity"/></span>
+                            <span class="minus"><i class="ri-subtract-line"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cart-tab-footer">
+        <h2 class="subtotal">Subtotal:</h2>
+        <button class="checkout btn">Checkout</button>
+        <a href="#" class="text-center d-block p-3 text-dark">Continue Shopping</a>
+    </div>
+</div>
+
+<div class="land">
+    <img th:src="@{|/client/images/footers/footer-bg-2.png|}" alt="">
+</div>
+
+<div th:replace="/client/layout/footer::footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:src="@{|/client/js/jquery.js|}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+<script th:src="@{|/client/js/cart.js|}"></script>
+<script th:src="@{|/client/js/navbar.js|}"></script>
+
+</body>
+</html>

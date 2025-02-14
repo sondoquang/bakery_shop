@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{|/client/css/index.css|}">
+    <title>Bakery</title>
+</head>
+
+<body>
+<div th:replace="~{/client/layout/header::header}"></div>
+<!-- intro -->
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-4">
+            <h1 class="fw-bold">Our patisserie produces <span class="highlight">unique sweets</span> for lovers of
+                yummy</h1>
+            <p class="mt-3">Curabitur tortor ante, vestibulum vel lacus id, semper malesuada sem. Sed sit amet
+                tortor augue. Integer magna neque.</p>
+            <a href="#" class="download-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                     class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                    <path
+                            d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h4.5L14 4.5zM10 3V0H4a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V5h-3a1 1 0 0 1-1-1z"/>
+                    <path d="M5 7h6v1H5V7zm0 2h6v1H5V9zm0 2h6v1H5v-1z"/>
+                </svg>
+                Download Price
+            </a>
+            <a href="#" class="read-more btn mt-3">
+                Read more
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <div class="card custom-card">
+                <img th:src="@{|/client/images/utils/section-about-bg.png|}" alt="Chocolate box">
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center mt-5">
+        <div class="col-md-4 mt-3">
+            <div class="custom-box">
+                <div class="icon">🍃</div>
+                <h5 class="fw-bold">Natural Organic Product</h5>
+                <p>Vivamus vel magna non mi gravida ultr sed ut turpis.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="custom-box">
+                <div class="icon">🎁</div>
+                <h5 class="fw-bold">Packaging Design</h5>
+                <p>Praesent sit amet fringilla eros. Nunc pulv dui tellus.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mt-3">
+            <div class="custom-box">
+                <div class="icon">🍫</div>
+                <h5 class="fw-bold">Best Quality Cocoa</h5>
+                <p>Cras in laoreet metus, vitae efficitur libero. Nam sit amet orci.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- story -->
+<div class="container-fluid p-0 py-5 wrap-story">
+    <img th:src="@{|/client/images/utils/banner.jpg|}" alt="" class="story-image">
+    <div class="content">
+        <p class="text-content">Made with love <br>
+            <span>unique sweets</span> for gourmet
+        </p>
+    </div>
+    <div class="rotating-square"></div>
+</div>
+
+<!-- review product -->
+<div class="container">
+    <p class="online-store text-center">Online Store</p>
+    <p class="title text-center">Discover Sweet Delicious</p>
+    <div class="row text-center">
+        <div class="col-lg-3 col-md-6 ">
+            <div class="item mt-3">
+                <div class="image-product">
+                    <img th:src="@{|/client/images/products/product01.png|}" class="w-100" alt="">
+                </div>
+                <div class="add-to-cart">
+                    <button class="btn button-add-cart">Add To Cart</button>
+                </div>
+                <div class="content-product">
+                    <p class="name mt-3">Milk Chocolate With Peanuts </p>
+                    <p class="price mt-3">30$</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="item mt-3">
+                <div class="image-product">
+                    <img th:src="@{|/client/images/products/product02.png|}" class="w-100" alt="">
+                </div>
+                <div class="add-to-cart">
+                    <button class="btn button-add-cart">Add To Cart</button>
+                </div>
+                <div class="content-product">
+                    <p class="name mt-3">Pastry Chef Fantasy </p>
+                    <p class="price mt-3">25$</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="item mt-3">
+                <div class="image-product">
+                    <img th:src="@{|/client/images/products/product03.png|}" class="w-100" alt="">
+                </div>
+                <div class="add-to-cart">
+                    <button class="btn button-add-cart">Add To Cart</button>
+                </div>
+                <div class="content-product">
+                    <p class="name mt-3">Truffle With Vanilla </p>
+                    <p class="price mt-3">50$</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="item mt-3">
+                <div class="image-product">
+                    <img th:src="@{|/client/images/products/product04.png|}" class="w-100" alt="">
+                </div>
+                <div class="add-to-cart">
+                    <button class="btn button-add-cart">Add To Cart</button>
+                </div>
+                <div class="content-product">
+                    <p class="name mt-3">Almond Dark Chocolate </p>
+                    <p class="price mt-3">22.00$</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 mt-4">
+            <button class="online-store-btn">Online Store</button>
+        </div>
+    </div>
+</div>
+<div class="land">
+    <img th:src="@{|/client/images/footers/footer-bg-2.png|}" alt="">
+</div>
+<div th:replace="~{client/layout/footer::footer}"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
