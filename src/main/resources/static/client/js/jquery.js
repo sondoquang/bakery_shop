@@ -1,9 +1,8 @@
 (function ($) {
-
+    "use strict";
     $('.btnAddToCart').click(function (event) {
-        debugger
         event.preventDefault();
-
+        debugger
         if (!isLogin()) {
             $.toast({
                 heading: 'Lỗi thao tác !',
@@ -14,8 +13,8 @@
             return;
         }
         const productId = $(this).attr('data-product-id');
-        // const token = $("meta[name='_csrf']").attr("content");
-        // const header = $("meta[name='_csrf_header']").attr("content");
+        const token = $("meta[name='_csrf']").attr("content");
+        const header = $("meta[name='_csrf_header']").attr("content");
         const qty = $("#data-product-qty").val();
         let quantity = 1;
         if(qty){
@@ -24,9 +23,9 @@
 
         $.ajax({
             url: `${window.location.origin}/api/v1/product/add`,
-            // beforeSend: function (xhr) {
-            //     xhr.setRequestHeader(header, token);
-            // },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
             type: "POST",
             data: JSON.stringify({quantity: quantity, productId: productId}),
             contentType: "application/json",

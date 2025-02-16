@@ -31,6 +31,8 @@ public class CartController {
         Cart cart = cartService.findByUser(session.getAttribute("email").toString());
         if(cart != null) {
             model.addAttribute("products", cart.getCartDetails());
+            Double totalAmount = cartDetailService.getTotalAmount(cart.getId());
+            model.addAttribute("totalAmount", totalAmount);
         }else{
             model.addAttribute("products", new ArrayList<CartDetail>());
         }

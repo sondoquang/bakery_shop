@@ -1,0 +1,32 @@
+.image-product {
+    width: 60px;
+    height: 60px;
+}
+
+td.image {
+    justify-items: center;
+}
+
+.edit-product {
+    padding: 6px;
+}
+
+.edit-product a {
+    display: inline-block;
+    background-color: antiquewhite;
+    font-weight: bold;
+}
+
+.page-link.active {
+    background-color: #7380ec;
+    color: white;
+}
+
+.form-label{
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.invalid-feedback span{
+    font-size: .9rem;
+}

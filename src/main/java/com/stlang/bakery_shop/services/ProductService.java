@@ -4,6 +4,7 @@ import com.stlang.bakery_shop.domains.Product;
 import com.stlang.bakery_shop.repositories.ProductRepository;
 import com.stlang.bakery_shop.services.iservices.IProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<Product> findAllProducts(Pageable pageable) {
+    public Page<Product> findAllProducts(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return productRepository.findAll(pageable);
     }
 

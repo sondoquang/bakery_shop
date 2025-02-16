@@ -2,6 +2,7 @@ package com.stlang.bakery_shop.controllers.clients;
 
 import com.stlang.bakery_shop.domains.Product;
 import com.stlang.bakery_shop.services.iservices.IProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,16 +30,10 @@ public class ProductController {
             Model model,
             @RequestParam("page") Optional<String> pageNo,
             @RequestParam("limit") Optional<String> count) {
-        int limit = count.map(Integer::parseInt).orElse(12);
-        int page = pageNo.map(Integer::parseInt).orElse(1);
-        Pageable pageable = PageRequest.of(page - 1, limit);
-        Page<Product> list = productService.findAllProducts(pageable);
-        List<Product> products = list.getContent();
-        model.addAttribute("products", products);
-        model.addAttribute("pageNo", page);
-        model.addAttribute("size", list.getTotalPages());
-        model.addAttribute("limit", limit);
-        model.addAttribute("totalElements", list.getTotalElements());
+        int pageSize = count.map(Integer::parseInt).orElse(12);
+        int pageNumber = pageNo.map(Integer::parseInt).orElse(1);
+        Page<Product> page = productService.findAllProducts(pageNumber, pageSize);
+        model.addAttribute("page",page);
         return "client/product-view";
     }
 

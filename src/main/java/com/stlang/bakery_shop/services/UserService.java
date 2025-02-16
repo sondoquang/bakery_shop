@@ -35,6 +35,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User findByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber).orElse(null);
+    }
+
+    @Override
     public User addUser(User user) {
         // 1. Kiểm tra sdt đã tồn tại hay chưa //
         User existingUser = userRepository.findByPhoneNumber(user.getPhoneNumber()).orElse(null);

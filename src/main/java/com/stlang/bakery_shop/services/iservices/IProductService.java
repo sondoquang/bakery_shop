@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IProductService {
 
-    Page<Product> findAllProducts(Pageable pageable);
+    Page<Product> findAllProducts(int pageNumber, int pageSize);
     Product findProductById(long id);
     Boolean existsByName(String name);
     Product addProduct(Product product);

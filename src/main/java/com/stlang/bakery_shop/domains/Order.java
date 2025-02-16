@@ -1,6 +1,8 @@
 package com.stlang.bakery_shop.domains;
 
 import com.stlang.bakery_shop.domains.enums.OrderStatus;
+import com.stlang.bakery_shop.domains.enums.PaymentMethod;
+import com.stlang.bakery_shop.domains.enums.ShippingMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +23,7 @@ public class Order {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Size(min = 6, max = 100, message = "FullName must greater than 5 character and less than 101 character !")
     private String fullname;
@@ -32,8 +34,6 @@ public class Order {
     @Size(min = 10, max = 20, message = "Phone number must be greater than 9 and less than 21 character !")
     private String phoneNumber;
 
-    @NotBlank(message = "Address is not empty !")
-    private String address;
     private String note;
 
     @Temporal(TemporalType.DATE)
@@ -47,14 +47,18 @@ public class Order {
 
     @NotNull
     private boolean isActive;
-    @NotBlank (message = "Shipping method is not empty !")
-    private String shippingMethod;
+
+    @Enumerated(EnumType.STRING)
+    private ShippingMethod shippingMethod = ShippingMethod.Express_Shipping;
     @NotBlank (message = "Shipping address is not empty !")
     private String shippingAddress;
-    @NotBlank (message = "Shipping date is not empty !")
-    private String shippingDate;
-    @NotBlank (message = "Payment method is not empty !")
-    private String paymentMethod;
+
+    @Builder.Default
+    private Date shippingDate = new Date();
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private PaymentMethod paymentMethod = PaymentMethod.COD;
 
     @ManyToOne
     @JoinColumn(name="user_id")

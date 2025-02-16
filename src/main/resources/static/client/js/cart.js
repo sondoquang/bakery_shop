@@ -1,16 +1,3 @@
-// const cartTab = document.querySelector('.cart-tab');
-// const cartBtn = document.querySelector('.cart-btn');
-// const closeBtn = document.querySelector('.close-btn');
-//
-//
-// cartBtn.addEventListener('click', () => {
-//     cartTab.classList.add('show');
-// })
-//
-// closeBtn.addEventListener('click',() => {
-//     cartTab.classList.remove('show');
-//     cartTab.classList.add('hidden');
-// })
 
 const limit = document.querySelector("#select-limit-item");
 

@@ -97,6 +97,7 @@ small {
 
 .content {
     top: 50%;
+    left: 0;
 }
 
 .bg-image img {

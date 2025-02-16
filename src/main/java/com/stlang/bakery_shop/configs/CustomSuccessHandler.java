@@ -1,10 +1,14 @@
 package com.stlang.bakery_shop.configs;
 
-import com.stlang.bakery_shop.constants.Constant;
+import com.stlang.bakery_shop.constants.ConstantRole;
+import com.stlang.bakery_shop.domains.User;
+import com.stlang.bakery_shop.services.UserService;
+import com.stlang.bakery_shop.services.iservices.IUserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -19,13 +23,20 @@ import java.util.Map;
 
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
+
+    private final IUserService userService;
+
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-        protected String determineTargetUrl(final Authentication authentication) {
+    public CustomSuccessHandler(IUserService userService) {
+        this.userService = userService;
+    }
+
+    protected String determineTargetUrl(final Authentication authentication) {
 
         Map<String, String> roleTargetUrlMap = new HashMap<>();
-        roleTargetUrlMap.put(Constant.ROLE_USER, "/");
-        roleTargetUrlMap.put(Constant.ROLE_ADMIN, "/admin");
+        roleTargetUrlMap.put(ConstantRole.ROLE_USER, "/");
+        roleTargetUrlMap.put(ConstantRole.ROLE_ADMIN, "/admin");
 
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
@@ -38,12 +49,19 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         throw new IllegalStateException();
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request) {
+    protected void clearAuthenticationAttributes(HttpServletRequest request, Authentication authentication) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        // Get email //
+        String email = authentication.getName();
+        session.setAttribute("email",email);
+        User user = userService.findByEmail(email);
+        session.setAttribute("fullName",user.getFullname());
+        session.setAttribute("phoneNumber",user.getPhoneNumber());
+        session.setAttribute("address",user.getAddress());
     }
 
 
@@ -55,5 +73,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
         redirectStrategy.sendRedirect(request, response, targetUrl);
+        clearAuthenticationAttributes(request, authentication);
     }
 }

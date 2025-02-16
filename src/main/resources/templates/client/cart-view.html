@@ -65,15 +65,15 @@
             </table>
             <div class="empty-product">
                 <div th:class="@{|${products.size() > 0?'d-block':'d-none'}|}">
-                    <p class="empty-product-content"><span style="color: #c2a061;">Total amount:</span> <span >500000 </span>vnđ</p>
+                    <p class="empty-product-content"><span style="color: #c2a061;">Total amount:</span> <span th:text="${#numbers.formatDecimal(totalAmount,0,'POINT',2,'COMMA')}">500000 </span>vnđ</p>
                 </div>
                 <div th:class="@{|${products.size() == 0?'d-block':'d-none'}|}">
                     <p class="empty-product-content">Your cart is currently empty.</p>
                 </div>
             </div>
             <div class="btn-action d-flex">
-                <a class=" btn btn-return" th:href="@{/product}">return to shop</a>
-                <button th:class="@{|btn btn-return ms-3 ${products.size() > 0?'d-block':'d-none'}|}">Payment</button>
+                <a class=" btn btn-return" th:href="@{/products}">return to shop</a>
+                <a th:href="@{|/payment|}" th:class="@{|btn btn-return ms-3 ${products.size() > 0?'d-block':'d-none'}|}">Payment</a>
             </div>
         </div>
     </div>

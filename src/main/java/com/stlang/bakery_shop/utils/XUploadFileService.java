@@ -5,7 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class XUploadFileService {
@@ -13,18 +18,27 @@ public class XUploadFileService {
     @Autowired
     ServletContext servletContext;
 
-    public File save(MultipartFile file, String folder){
-        File dir = new File(servletContext.getRealPath(folder));
-        if (!dir.exists()){
-            dir.mkdirs();
+    public String save(MultipartFile file, String folder) throws IOException {
+//        File dir = new File(servletContext.getRealPath(folder));
+//        if (!dir.exists()){
+//            dir.mkdirs();
+//        }
+//        try {
+//            File saveFile = new File(dir, file.getOriginalFilename());
+//            file.transferTo(saveFile);
+//            return saveFile;
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+        String fileName = file.getOriginalFilename();
+        String uniqueFilename = UUID.randomUUID()+"_"+fileName;
+        Path uploadDir  = Paths.get(folder);
+        if(!Files.exists(uploadDir)){
+            Files.createDirectories(uploadDir);
         }
-        try {
-            File saveFile = new File(dir, file.getOriginalFilename());
-            file.transferTo(saveFile);
-            return saveFile;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Path destination = Paths.get(uploadDir.toString(),uniqueFilename);
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        return uniqueFilename;
     }
 
 }

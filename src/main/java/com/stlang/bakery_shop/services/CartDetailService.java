@@ -9,6 +9,7 @@ import com.stlang.bakery_shop.repositories.ProductRepository;
 import com.stlang.bakery_shop.services.iservices.ICartDetailService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,5 +55,16 @@ public class CartDetailService implements ICartDetailService {
             return cartDetailRepository.save(cartDetail);
         }
         return null;
+    }
+
+    @Override
+    public Double getTotalAmount(long cartId) {
+        Cart cart = cartRepository.findById(cartId).orElse(null);
+        List<CartDetail> cartDetails = cart.getCartDetails();
+        Double totalAmount = 0.0;
+        for(CartDetail cartDetail : cartDetails){
+            totalAmount += cartDetail.getTotalAmount();
+        }
+        return totalAmount;
     }
 }

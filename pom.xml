@@ -74,16 +74,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--	 https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc &ndash;&gt;-->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-jdbc</artifactId>
 		</dependency>
-
-		<!--Security-->
+<!--		Security-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<build>

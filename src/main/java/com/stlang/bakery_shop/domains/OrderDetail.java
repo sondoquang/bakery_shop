@@ -16,15 +16,15 @@ public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Min(value = 0, message = "Product's price must be greater than 0 !")
-    private double price;
+    private Double price;
 
     @Min(value = 1, message = "Product's price must be greater than 1 !")
     private int numberOfProducts;
     @Min(value = 0, message = "Total money must be greater than 0 !")
-    private double total_money;
+    private Double totalMoney;
 
     @ManyToOne
     @JoinColumn(name="product_id")
