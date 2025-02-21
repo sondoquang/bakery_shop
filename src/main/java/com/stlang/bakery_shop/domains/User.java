@@ -24,6 +24,7 @@ public class User {
     private Long id;
 
     @Size(min = 6, max = 100, message = "FullName must greater than 5 character and less than 101 character !")
+    @Column(columnDefinition = "NVARCHAR(200)")
     private String fullname;
 
     @Size(min = 10, max = 20, message = "Phone number must be greater than 9 and less than 21 character !")
@@ -33,8 +34,9 @@ public class User {
     private String email;
 
     @NotBlank(message = "Address is not empty !")
+    @Column(columnDefinition = "NVARCHAR(500)")
     private String address;
-    @Size(min = 6, message = "Password must greater than 5 character !")
+    @Size(min = 6, max= 79, message = "Password must greater than 5 character and less than 80 character !")
     private String password;
 
     @Builder.Default
@@ -52,6 +54,15 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String provider;
+
+    @PrePersist
+    protected void onPrePersist() {
+        if (this.provider == null) {
+            this.provider = "LOCAL";
+        }
+    }
 
 
 }

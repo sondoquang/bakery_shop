@@ -2,8 +2,12 @@ package com.stlang.bakery_shop.controllers.auth;
 
 import com.stlang.bakery_shop.domains.User;
 import com.stlang.bakery_shop.dto.RegisterDTO;
+
+import com.stlang.bakery_shop.services.MailService;
+import com.stlang.bakery_shop.services.iservices.IMailService;
 import com.stlang.bakery_shop.services.iservices.IUserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,9 @@ public class RegisterController {
 
     private final PasswordEncoder passwordEncoder;
     private final IUserService userService;
+
+    @Autowired
+    MailService mailService;
 
     public RegisterController(PasswordEncoder passwordEncoder, IUserService userService) {
         this.passwordEncoder = passwordEncoder;
@@ -39,6 +46,7 @@ public class RegisterController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saveUser = userService.addUser(user);
         if(saveUser != null) {
+            mailService.send(saveUser.getEmail(),"WellCome","Thank you for registering your account.");
             return "redirect:/login";
         }
         model.addAttribute("msg", "Register unsuccessful !");

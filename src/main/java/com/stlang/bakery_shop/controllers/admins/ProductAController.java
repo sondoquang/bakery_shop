@@ -10,8 +10,6 @@ import com.stlang.bakery_shop.services.iservices.IProductService;
 import com.stlang.bakery_shop.utils.XUploadFileService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.stlang.bakery_shop.constants.ConstantPath.PATH_FILE_ADMIN;
 
 @Controller
 @RequestMapping("/admin/product")
@@ -101,7 +98,8 @@ public class ProductAController {
                                      RedirectAttributes redirectAttributes,
                                      @RequestParam("photoProduct") MultipartFile photoProduct,
                                      @Valid Product product,
-                                     BindingResult result) throws IOException {
+                                     BindingResult result,
+                                     Model model) throws IOException {
         redirectAttributes.addAttribute("page", pageNo);
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.product", result);
@@ -109,8 +107,8 @@ public class ProductAController {
             return "redirect:/admin/product/index";
         }
         if(photoProduct != null){
-            String fileName = xFileService.save(photoProduct,PATH_FILE_ADMIN+File.separator+"products");
-            product.setImage(fileName);
+//            String fileName = xFileService.save(photoProduct,PATH_FILE_ADMIN+File.separator+"products");
+            product.setImage("");
         }else{
             product.setImage("");
         }
@@ -133,8 +131,8 @@ public class ProductAController {
             return "redirect:/admin/product/index";
         }
         if(!file.isEmpty()){
-            String fileName = xFileService.save(file,PATH_FILE_ADMIN+"products");
-            product.setImage(fileName);
+            File fileName = xFileService.save(file,"/client/images/products");
+            product.setImage(fileName.getName());
         }else{
             Product existingProduct = productService.findProductById(product.getId());
             product.setImage(existingProduct.getImage());

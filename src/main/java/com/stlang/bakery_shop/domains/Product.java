@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +21,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name="products")
-public class Product {
-
+public class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,10 +38,11 @@ public class Product {
     private String image;
 
     @NotBlank(message = "Short Description is not empty !")
+    @Column(columnDefinition = "NVARCHAR(200)")
     private String shortDesc;
 
     @NotBlank(message = "Detail Description is not empty !")
-    @Column (columnDefinition = "NVARCHAR(MAX)")
+    @Column (columnDefinition = "NVARCHAR(8000)")
     private String detailDesc;
 
     @NotNull(message = "Target must be select !")

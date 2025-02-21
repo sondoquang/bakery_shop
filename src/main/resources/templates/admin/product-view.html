@@ -101,7 +101,7 @@
                     </div>
                     <div class="mt-3">
                         <img class="img-thumbnail" th:style="'max-height: 250px; width: 400px; object-fit: contain; display: ' + (${param.edit} != null ? 'block' : 'none')" alt="avatar preview"
-                             id="imagePreview" th:src="@{|/admin/images/products/*{image}|}" />
+                             id="imagePreview" th:src="@{|/client/images/products/*{image}|}" />
                     </div>
                     <div class="action mt-3">
                         <button class="btn btn-primary text-white me-2" th:formaction="@{|/admin/product/create?page=${page.number}|}">Create</button>
@@ -131,9 +131,8 @@
                 <tr th:each="p: ${page.content}">
                     <td th:text="${p.id}"></td>
                     <td class="image">
-                        <img th:src="@{|/admin/images/products/${p.image}|}"
+                        <img th:src="@{|/client/images/products/${p.image}|}"
                                            class="img-thumbnail image-product" alt="Cinque Terre">
-                        <span th:text="${p.image}"></span>
                     </td>
                     <td th:text="${p.name}">Iphone 15 Promax</td>
                     <td th:text="${p.price}">5000 $</td>
