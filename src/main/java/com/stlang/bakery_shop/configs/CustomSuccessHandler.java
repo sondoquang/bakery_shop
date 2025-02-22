@@ -2,13 +2,11 @@ package com.stlang.bakery_shop.configs;
 
 import com.stlang.bakery_shop.constants.ConstantRole;
 import com.stlang.bakery_shop.domains.User;
-import com.stlang.bakery_shop.services.UserService;
 import com.stlang.bakery_shop.services.iservices.IUserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -33,6 +31,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     protected String determineTargetUrl(final Authentication authentication) {
+
 
         Map<String, String> roleTargetUrlMap = new HashMap<>();
         roleTargetUrlMap.put(ConstantRole.ROLE_USER, "/");

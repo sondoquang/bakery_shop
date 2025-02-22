@@ -3,6 +3,7 @@ package com.stlang.bakery_shop.configs;
 import com.stlang.bakery_shop.services.CustomUserDetailsService;
 import com.stlang.bakery_shop.services.UserService;
 import com.stlang.bakery_shop.services.iservices.IUserService;
+import com.stlang.bakery_shop.services.userinfo.CustomOAuth2UserService;
 import jakarta.servlet.DispatcherType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -70,17 +71,21 @@ public class SecurityConfiguration {
                                 DispatcherType.INCLUDE)
                         .permitAll()
 
-                        .requestMatchers("/", "/login", "/register/**",
+                        .requestMatchers("/", "/login", "/register/**","/products/**","/product-detail/**",
                                 "/client/**", "/css/**", "/js/**", "/images/**")
                         .permitAll()
 
                         .requestMatchers("/my-cart/**").hasRole("USER")
-                        .requestMatchers("/products/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
 //                .oauth2Login(Customizer.withDefaults())
-                .oauth2Login(oauth2 -> oauth2.loginPage("/login"))
+                .oauth2Login(oauth2 -> oauth2.loginPage("/login")
+                        .successHandler(customSuccessHandler(userService))
+                        .failureUrl("/login?error")
+                        .userInfoEndpoint(user ->
+                                user.userService(new CustomOAuth2UserService(userService))))
+
                 .sessionManagement((sessionManagement) -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)//Luôn luôn tạo mới session
                         .invalidSessionUrl("/logout?expired")
