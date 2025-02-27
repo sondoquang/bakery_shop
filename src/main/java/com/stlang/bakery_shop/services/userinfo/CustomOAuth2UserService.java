@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.stlang.bakery_shop.domains.User;
 import com.stlang.bakery_shop.domains.enums.Role;
+import com.stlang.bakery_shop.repositories.UserRepository;
 import com.stlang.bakery_shop.services.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,11 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public CustomOAuth2UserService(UserService userService) {
-        this.userService = userService;
+    public CustomOAuth2UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -39,24 +41,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //        Long googleId = Long.parseLong((String) attributes.get("sub"));
 
         if(email != null){
-            User user = userService.findByEmail(email);
+            User user = userRepository.findByEmail(email).orElse(null);
             if(user == null){
                 // Create new user //
                 User newUser = User.builder()
                         .fullname(fullName)
                         .email(email)
-                        .phoneNumber("0999999999")
                         .address("address")
                         .password("password")
                         .isActive(true)
                         .role(Role.USER)
                         .provider("google")
                         .build();
-                userService.addUser(newUser);
+                userRepository.save(newUser);
             }
         }
 
-        System.out.println("User email: " + email);
 
         return new DefaultOAuth2User(
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+Role.USER)),

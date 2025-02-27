@@ -40,31 +40,47 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User addUser(User user) {
-        // 1. Kiểm tra sdt đã tồn tại hay chưa //
-        User existingUser = userRepository.findByPhoneNumber(user.getPhoneNumber()).orElse(null);
+    public Integer createUser(User user) {
         User saveUser = userRepository.findByEmail(user.getEmail()).orElse(null);
-        if(existingUser == null && saveUser == null) {
-            // 3. Thêm user : Return User vua them
-            return userRepository.save(user);
+        if(saveUser != null)
+            return -2;
+        User existingUser = userRepository.findByPhoneNumber(user.getPhoneNumber()).orElse(null);
+        if(existingUser != null)
+            return -3;
+        if(user.getRole() == null){
+            user.setRole(Role.USER);
         }
-        return null;
+        userRepository.save(user);
+        return 1;
     }
 
     @Override
-    public User updateUser(User user) {
-        // 1. Kiểm tra sự tồn tại của user
+    public Integer updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).orElse(null);
         if (existingUser != null) {
-            return userRepository.save(user);
+            User existUserWithEmail = userRepository.findByEmailAndIdNot(user.getEmail(), user.getId());
+            if(existUserWithEmail != null)
+                return -2;
+            User existUserWithPhone = userRepository.findByPhoneNumberAndIdNot(user.getPhoneNumber(), user.getId());
+            if(existUserWithPhone != null)
+                return -3;
+            user.setPassword(existingUser.getPassword());
+            userRepository.save(user);
+            return 1;
         }else
-            return null;
+            return -1;
     }
 
     @Override
-    public void deleteUser(User user) {
-        // 1. Kiểm tra sự tồn tại của user
-        userRepository.findById(user.getId()).ifPresent(userRepository::delete);
+    public Integer deleteUser(Integer userId, String email) {
+        User existingUser = userRepository.findById(Long.valueOf(userId)).orElse(null);
+        if(existingUser != null) {
+            if(email.equals(existingUser.getEmail()))
+                return -2;
+            userRepository.delete(existingUser);
+            return 1;
+        }
+        return -1;
     }
 
     @Override

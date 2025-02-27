@@ -3,7 +3,6 @@ package com.stlang.bakery_shop.configs;
 import com.stlang.bakery_shop.constants.ConstantRole;
 import com.stlang.bakery_shop.domains.User;
 import com.stlang.bakery_shop.services.iservices.IUserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +23,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private final IUserService userService;
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     public CustomSuccessHandler(IUserService userService) {
         this.userService = userService;
@@ -35,7 +34,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         Map<String, String> roleTargetUrlMap = new HashMap<>();
         roleTargetUrlMap.put(ConstantRole.ROLE_USER, "/");
-        roleTargetUrlMap.put(ConstantRole.ROLE_ADMIN, "/admin/product/index");
+        roleTargetUrlMap.put(ConstantRole.ROLE_ADMIN, "/admin/dashboard");
 
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority grantedAuthority : authorities) {
@@ -65,7 +64,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {

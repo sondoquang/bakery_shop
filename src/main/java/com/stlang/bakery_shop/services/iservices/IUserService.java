@@ -12,9 +12,9 @@ public interface IUserService {
     User findById(long id);
     User findByEmail(String email);
     User findByPhoneNumber(String phoneNumber);
-    User addUser(User user);
-    User updateUser(User user);
-    void deleteUser(User user);
+    Integer createUser(User user);
+    Integer updateUser(User user);
+    Integer deleteUser(Integer userId, String email);
 
     User registerDTOToUser(RegisterDTO registerDTO);
 

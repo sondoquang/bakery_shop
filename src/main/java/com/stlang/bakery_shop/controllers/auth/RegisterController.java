@@ -4,7 +4,6 @@ import com.stlang.bakery_shop.domains.User;
 import com.stlang.bakery_shop.dto.RegisterDTO;
 
 import com.stlang.bakery_shop.services.MailService;
-import com.stlang.bakery_shop.services.iservices.IMailService;
 import com.stlang.bakery_shop.services.iservices.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +43,9 @@ public class RegisterController {
         }
         User user = userService.registerDTOToUser(registerUser);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User saveUser = userService.addUser(user);
-        if(saveUser != null) {
-            mailService.send(saveUser.getEmail(),"WellCome","Thank you for registering your account.");
+        int result = userService.createUser(user);
+        if(result == 1) {
+            mailService.send(user.getEmail(),"WellCome","Thank you for registering your account.");
             return "redirect:/login";
         }
         model.addAttribute("msg", "Register unsuccessful !");

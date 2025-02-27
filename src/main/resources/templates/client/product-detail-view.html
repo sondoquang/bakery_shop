@@ -67,7 +67,7 @@
                       <form th:action="@{|/cart/add/*{id}|}" method="post">
                         <i class="ri-subtract-fill btn-plus ms-2"></i>
                         <label>
-                          <input type="text" class="quantity ms-2" id="data-product-qty" name="quantity" min="1" value="1" readonly>
+                          <input type="text" class="quantity ms-2" id="data-product-qty" name="quantity" min="1" value="1">
                         </label>
                         <i class="ri-add-line btn-minus ms-2"></i>
                         <button class="btn btnAddToCart btn-custom ms-3" th:attr="data-product-id=*{id}">Add to cart</button>

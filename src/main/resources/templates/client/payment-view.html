@@ -94,6 +94,15 @@
                     <p>Total</p>
                     <p class="total"><span th:text="${#numbers.formatDecimal(totalAmount,0,'POINT',1,'COMMA')}">100 000</span><span>VND</span></p>
                 </div>
+                <div class="form-check mb-3">
+                    <input type="radio" class="form-check-input" name="paymentMethod" th:field="*{paymentMethod}" value="COD" id="COD" checked/>
+                    <label class="form-check-label" for="COD">Cash on Delivery</label>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="radio" class="form-check-input" name="paymentMethod" th:field="*{paymentMethod}" value="BANKING" id="BANKING"/>
+                    <label class="form-check-label" for="BANKING">Banking</label>
+                </div>
+                <input type="text" hidden th:value="${totalAmount}" name="totalAmount" />
                 <div class="btn-action text-center mt-2">
                     <a th:href="@{/my-cart}" class=" btn btn-return">return to shop</a>
                     <button class=" btn btn-return ms-3">Payment</button>

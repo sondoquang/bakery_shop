@@ -6,6 +6,7 @@ import com.stlang.bakery_shop.services.iservices.ICartService;
 import com.stlang.bakery_shop.utils.XSessionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,9 +46,12 @@ public class CartAPI {
     }
 
     @PostMapping("/api/v1/product/add")
-    public ResponseEntity<Integer> addProductToCart(@RequestBody CartRequest cartRequest,
+    public ResponseEntity<?> addProductToCart(@RequestBody CartRequest cartRequest,
                                                     HttpServletRequest request) {
         String email = session.getAttribute("email");
+        if(cartRequest.getQuantity() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product's quantity is less than 0!");
+        }
         cartRequest.setQuantity(cartRequest.getQuantity() <= 0 ? 1 : cartRequest.getQuantity());
         Cart cart = cartService.addProductToCart(email, cartRequest.getProductId(), (int) cartRequest.getQuantity());
         request.getSession().setAttribute("sumProductCart", cart.getSumProduct());

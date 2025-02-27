@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CartController {
@@ -55,15 +56,34 @@ public class CartController {
     @RequestMapping("/my-cart/update/{productId}")
     public String updateCart(@PathVariable int productId,
                              HttpSession session,
-                             @RequestParam("quantity") int qty) {
+                             @RequestParam("quantity")Optional<String> qty) {
         String emailUser = session.getAttribute("email").toString();
+        int quantity ;
+        if(!isNumber(qty.get())) {
+            quantity = 0;
+        }else{
+            quantity = Integer.parseInt(qty.get());
+        }
+        if(quantity < 1 ){
+            return "redirect:/my-cart";
+        }
         if(emailUser != null) {
             Cart cart = cartService.findByUser(emailUser);
             if(cart != null) {
-                cartDetailService.updateQuantity(cart.getId(),productId,qty);
+                cartDetailService.updateQuantity(cart.getId(),productId,quantity);
             }
         }
         return "redirect:/my-cart";
+    }
+
+
+    private boolean isNumber(String value){
+        try {
+             int number = Integer.parseInt(value);
+             return true;
+        }catch(NumberFormatException e){
+            return false;
+        }
     }
 
 }

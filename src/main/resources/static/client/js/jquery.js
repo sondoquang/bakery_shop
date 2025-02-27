@@ -42,18 +42,87 @@
                 })
             },
             error: function (response) {
-                alert("có lỗi xảy ra, check code đi ba :v")
-                console.log("error: ", response);
+                console.log({response})
+                $.toast({
+                    heading: 'Lỗi thao tác !',
+                    text: 'Product\'s quantity is less than 0!',
+                    position: 'top-right',
+                    icon: 'error'
+                })
             }
         });
     });
 
     function isLogin() {
         const elementLogin = $('.isLogin');
-        console.log(elementLogin?.length)
         if (elementLogin?.length > 0) {
             return true;
         }
         return false;
     }
+
+    $(document).ready(function (){
+        $('#btn-filter').click(function (event){
+            console.log("click filter")
+            event.preventDefault();
+            let targetArray = [];
+            let priceArray = [];
+
+            // Target Filter //
+            $("#target-filter .form-check-input:checked").each(function () {
+                targetArray.push($(this).val());
+            });
+            // Target Filter //
+            $("#between-price .form-check-input:checked").each(function () {
+                priceArray.push($(this).val());
+            });
+
+            let sortValue = $('input[name="sort-radio"]:checked').val();
+
+            const currentUrl = new URL(window.location.href);
+            const searchParams = currentUrl.searchParams;
+
+            searchParams.set('page', '1');
+            searchParams.set('sort', sortValue);
+
+            if (targetArray.length > 0) {
+                searchParams.set('target', targetArray.join(','));
+            } else {
+                searchParams.delete('target');
+            }
+
+            if (priceArray.length > 0) {
+                searchParams.set('price', priceArray.join(','));
+            } else {
+                searchParams.delete('price');
+            }
+            window.location.href = currentUrl.toString();
+        });
+
+        const params = new URLSearchParams(window.location.search);
+
+        // Set checkboxes for 'target'
+        if (params.has('target')) {
+            const targets = params.get('target').split(',');
+            targets.forEach(factory => {
+                $(`#target-filter .form-check-input[value="${factory}"]`).prop('checked', true);
+            });
+        }
+
+        // Set checkboxes for 'factory'
+        if (params.has('price')) {
+            const prices = params.get('price').split(',');
+            prices.forEach(price => {
+                $(`#between-price .form-check-input[value="${price}"]`).prop('checked', true);
+            });
+        }
+
+
+        // Set radio buttons for 'sort'
+        if (params.has('sort')) {
+            const sort = params.get('sort');
+            $(`input[type="radio"][name="sort-radio"][value="${sort}"]`).prop('checked', true);
+        }
+
+    })
 })(jQuery);

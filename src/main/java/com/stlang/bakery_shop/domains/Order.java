@@ -2,6 +2,7 @@ package com.stlang.bakery_shop.domains;
 
 import com.stlang.bakery_shop.domains.enums.OrderStatus;
 import com.stlang.bakery_shop.domains.enums.PaymentMethod;
+import com.stlang.bakery_shop.domains.enums.PaymentStatus;
 import com.stlang.bakery_shop.domains.enums.ShippingMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -50,7 +51,9 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private ShippingMethod shippingMethod = ShippingMethod.Express_Shipping;
+
     @NotBlank (message = "Shipping address is not empty !")
+    @Column(columnDefinition = "NVARCHAR(1000)")
     private String shippingAddress;
 
     @Builder.Default
@@ -63,4 +66,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+
+    private String paymentRef;
+
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
 }

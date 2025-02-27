@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -17,7 +18,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class User {
     @Column(columnDefinition = "NVARCHAR(200)")
     private String fullname;
 
-    @Size(min = 10, max = 20, message = "Phone number must be greater than 9 and less than 21 character !")
+//    @Size(min = 10, max = 20, message = "Phone number must be greater than 9 and less than 21 character !")
     private String phoneNumber;
 
     @Email(message = "Email don't match format !")

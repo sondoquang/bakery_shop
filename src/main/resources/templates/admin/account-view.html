@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/fragments/layout::view(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+    <main>
+        <h1>Account Management</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" th:object="${user}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="mb-3 d-none">
+                        <label for="id" class="form-label">Id:</label> <input type="text" class="form-control d-none"
+                                                                              id="id"
+                                                                              placeholder="Enter name product..."
+                                                                              th:field="*{id}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fullname" class="form-label">Fullname:</label> <input type="text" class=""
+                                                                                  id="fullname"
+                                                                                  placeholder="Enter fullname..."
+                                                                                  th:field="*{fullname}"
+                                                                                  th:classappend="@{|form-control ${#fields.hasErrors('fullname') ? 'is-invalid' : ''}|}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('fullname')}">
+                            <span th:errors="*{fullname}">Error message</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label> <input type="text"
+                                                                                    id="email" th:field="*{email}"
+                                                                                    th:classappend="@{|form-control ${#fields.hasErrors('email') ? 'is-invalid' : ''}|}"
+                                                                                    placeholder="Enter email...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}">
+                            <span th:errors="*{email}">Error message</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone number:</label>
+                        <input type="text"
+                               th:classappend="@{|form-control ${#fields.hasErrors('phoneNumber') ? 'is-invalid' : ''}|}"
+                               id="phoneNumber"
+                               th:field="*{phoneNumber}"
+                               placeholder="Enter phone number...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}">
+                            <span th:errors="*{phoneNumber}">Error message</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address:</label>
+                        <input type="text"
+                               th:classappend="@{|form-control ${#fields.hasErrors('address') ? 'is-invalid' : ''}|}"
+                               id="address"
+                               th:field="*{address}"
+                               placeholder="Enter address...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}">
+                            <span th:errors="*{address}">Error message</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="ADMIN" name="role" id="admin" th:field="*{role}" >
+                            <label class="form-check-label" for="admin">
+                                Admin
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="USER" name="role" id="user" th:field="*{role}" >
+                            <label class="form-check-label" for="user">
+                                User
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-danger" th:text="${msg}"></p>
+
+                    <div class="action mt-3">
+                        <button class="btn btn-primary text-white me-2" th:formaction="@{|/admin/account/create|}">Create</button>
+                        <button class="btn btn-warning text-white me-2" th:formaction="@{|/admin/account/update|}">Update</button>
+                        <a class="btn btn-danger me-2"
+                           th:href="@{|/admin/account/delete/*{id}|}">Delete</a>
+                        <a class="btn btn-info text-white" th:href="@{|/admin/account/index|}">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="recent-orders">
+            <h1>Recent Account</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>FullName</th>
+                    <th>Email</th>
+                    <th>Phone number</th>
+                    <th>address</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user: ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.fullname}">Iphone 15 Promax</td>
+                    <td th:text="${user.email}">5000 $</td>
+                    <td th:text="${user.phoneNumber}">Còn Hàng</td>
+                    <td th:text="${user.address}">Còn Hàng</td>
+                    <td th:text="${user.role}">Còn Hàng</td>
+                    <td class="edit-product"><a th:href="@{|/admin/account/edit/${user.id}|}"
+                                                class="warning">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+<!--            <nav class="mt-5">-->
+<!--                <ul class="pagination justify-content-center">-->
+<!--                    <li class="page-item p-0">-->
+<!--                        <a class="page-link"-->
+<!--                           th:href="@{|/admin/product/index?page=${page.number > 1 ? page.number - 1 : 1}|}"-->
+<!--                           aria-label="Previous">-->
+<!--                            <span aria-hidden="true">&laquo;</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item p-0" th:each="p: ${#numbers.sequence(1, page.totalPages - 1)}">-->
+<!--                    <a-->
+<!--                            th:class="@{|page-link ${page.number == p?'active':''}|}"-->
+<!--                            th:href="@{|/admin/product/index?page=${p}|}"><span th:text="${p}"></span></a></li>-->
+<!--                    <li class="page-item p-0">-->
+<!--                        <a class="page-link"-->
+<!--                           th:href="@{|/admin/product/index?page=${page.number lt page.totalPages ? page.number + 1 : page.totalPages}|}"-->
+<!--                           aria-label="Next">-->
+<!--                            <span aria-hidden="true">&raquo;</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </nav>-->
+        </div>
+    </main>s
+</body>
+</html>

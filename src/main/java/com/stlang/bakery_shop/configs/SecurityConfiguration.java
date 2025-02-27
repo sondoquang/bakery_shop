@@ -1,15 +1,13 @@
 package com.stlang.bakery_shop.configs;
 
+import com.stlang.bakery_shop.repositories.UserRepository;
 import com.stlang.bakery_shop.services.CustomUserDetailsService;
 import com.stlang.bakery_shop.services.UserService;
-import com.stlang.bakery_shop.services.iservices.IUserService;
 import com.stlang.bakery_shop.services.userinfo.CustomOAuth2UserService;
 import jakarta.servlet.DispatcherType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,8 +21,7 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
-    @Autowired
-    IUserService userService;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,15 +53,14 @@ public class SecurityConfiguration {
     public SpringSessionRememberMeServices rememberMeServices() {
         SpringSessionRememberMeServices rememberMeServices =
                 new SpringSessionRememberMeServices();
-        // optionally customize
-        rememberMeServices.setAlwaysRemember(true);
+         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
 
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, UserService userService) throws Exception {
-        // v6. lamda
+    SecurityFilterChain filterChain(HttpSecurity http, UserService userService, UserRepository userRepository) throws Exception {
+
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD,
@@ -76,15 +72,16 @@ public class SecurityConfiguration {
                         .permitAll()
 
                         .requestMatchers("/my-cart/**").hasRole("USER")
+                        .requestMatchers("/account/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+
                 .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
-//                .oauth2Login(Customizer.withDefaults())
                 .oauth2Login(oauth2 -> oauth2.loginPage("/login")
                         .successHandler(customSuccessHandler(userService))
                         .failureUrl("/login?error")
                         .userInfoEndpoint(user ->
-                                user.userService(new CustomOAuth2UserService(userService))))
+                                user.userService(new CustomOAuth2UserService(userRepository))))
 
                 .sessionManagement((sessionManagement) -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)//Luôn luôn tạo mới session
