@@ -10,7 +10,7 @@
     <!-- style  css -->
     <link rel="stylesheet" th:href="@{|/admin/css/style.css|}">
     <link rel="stylesheet" th:href="@{|/admin/css/product.css|}">
-<!--    <script src="jquery-3.7.1.min.js"></script>-->
+    <!--    <script src="jquery-3.7.1.min.js"></script>-->
     <title>Admin Product</title>
     <title th:replace="${title}">Layout</title>
 </head>
@@ -27,20 +27,29 @@
             </div>
         </div>
         <div class="sidebar">
-            <a href="" class="text-mute" style="min-width: 150px"> <i class="ri-layout-grid-fill"></i>
-                <h3>Dashboard</h3></a> <a href="" style="min-width: 150px"> <i class="ri-user-3-line"></i>
-            <h3>Users</h3></a> <a href="" style="min-width: 150px"> <i class="ri-file-list-3-line"></i>
-            <h3>Orders</h3></a> <a href="" class="active" style="min-width: 150px"> <i class="ri-line-chart-line"></i>
+            <a th:href="@{|/admin/dashboard|}" th:classappend="@{|text-mute ${session.active == 0? 'active':''}|}" style="min-width: 150px"> <i class="ri-layout-grid-fill"></i>
+                <h3>Dashboard</h3></a>
+            <a th:href="@{|/admin/account/index|}" th:classappend="@{|${session.active == 1? 'active':''}|}" style="min-width: 150px"> <i class="ri-user-3-line"></i>
+            <h3>Users</h3></a>
+            <a th:href="@{|/admin/order/index|}" th:classappend="@{|text-mute ${session.active == 2? 'active':''}|}" style="min-width: 150px"> <i class="ri-file-list-3-line"></i>
+            <h3>Orders</h3></a>
+            <a th:href="@{|/admin/product/index|}" th:classappend="@{|text-mute ${session.active == 3? 'active':''}|}" style="min-width: 150px"> <i class="ri-line-chart-line"></i>
             <!--             <h3>Analytics</h3></a> <a href=""> <i class="ri-chat-ai-line"></i>-->
             <!--             <h3>message</h3><span class="message-count">25</span> </a> <a href="" class="active"> <i-->
             <!--                 class="ri-product-hunt-line"></i>-->
-            <h3>Products</h3></a> <a href="" style="min-width: 150px"> <i class="ri-file-chart-2-line"></i>
+            <h3>Products</h3></a>
+            <a  th:classappend="@{|text-mute ${session.active == 4? 'active':''}|}" style="min-width: 150px"> <i class="ri-file-chart-2-line"></i>
             <h3>Reports</h3></a>
             <!--             <a href=""> <i class="ri-settings-2-line"></i>-->
             <!--             <h3>Settings</h3></a> <a href=""> <i class="ri-add-fill"></i>-->
             <!--             <h3>Add Product</h3></a>-->
-            <a href=""> <i class="ri-logout-circle-line"></i>
-                <h3>Logout</h3></a>
+            <form action="/logout" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button class="btn btn-warning text-center d-flex align-items-center w-100" aria-current="page">
+                    <i class="ri-logout-circle-line"></i>
+                    Logout
+                </button>
+            </form>
         </div>
     </aside>
     <main th:replace="${main}">

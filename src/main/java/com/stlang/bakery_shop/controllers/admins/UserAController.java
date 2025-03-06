@@ -34,8 +34,9 @@ public class UserAController {
 
     @RequestMapping({"/admin/account/index","/admin/account/index/{error}"})
     public String formUser(Model model,
-                           @PathVariable("error") Optional<Integer> error) {
-
+                           @PathVariable("error") Optional<Integer> error,
+                           HttpSession session) {
+        session.setAttribute("active", 1);
         // Nếu có lỗi //
         model.addAttribute("msg",errors[error.orElse(0)]);
         if(model.asMap().containsKey("user")) {

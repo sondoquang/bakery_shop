@@ -7,6 +7,7 @@ import com.stlang.bakery_shop.domains.enums.Target;
 import com.stlang.bakery_shop.services.iservices.ICategoryService;
 import com.stlang.bakery_shop.services.iservices.IProductService;
 import com.stlang.bakery_shop.utils.XUploadFileService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -41,9 +42,10 @@ public class ProductAController {
     @RequestMapping({"/index", "/index/{errorId}"})
     public String productAdminIndex(Model model,
                                     @RequestParam(value = "page") Optional<String> pageNo,
-                                    @PathVariable("errorId") Optional<Integer> errorId
+                                    @PathVariable("errorId") Optional<Integer> errorId,
+                                    HttpSession session
     ) {
-
+        session.setAttribute("active", 3);
 
         int pageSize = 12;
         int pageNumber = pageNo.map(Integer::parseInt).orElse(1);

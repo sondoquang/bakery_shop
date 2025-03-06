@@ -7,6 +7,11 @@
 <body>
     <main>
         <h1>Product Management</h1>
+        <ul class="d-flex p-0">
+            <li><a href="/admin/dashboard" class="active">Home</a></li>
+            &nbsp // &nbsp
+            <li>Product</li>
+        </ul>
         <div class="row">
             <div class="col-md-12">
                 <form method="post" th:object="${product}" enctype="multipart/form-data">

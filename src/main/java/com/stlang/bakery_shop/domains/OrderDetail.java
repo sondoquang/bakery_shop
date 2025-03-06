@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -12,7 +14,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name="order_details")
-public class OrderDetail {
+public class OrderDetail implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,7 @@ public class OrderDetail {
 
     @Min(value = 1, message = "Product's price must be greater than 1 !")
     private int numberOfProducts;
+
     @Min(value = 0, message = "Total money must be greater than 0 !")
     private Double totalMoney;
 

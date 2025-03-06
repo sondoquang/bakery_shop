@@ -13,8 +13,12 @@ import com.stlang.bakery_shop.repositories.OrderRepository;
 import com.stlang.bakery_shop.repositories.UserRepository;
 import com.stlang.bakery_shop.services.iservices.ICartDetailService;
 import com.stlang.bakery_shop.services.iservices.IOrderService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,12 +39,36 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public List<Order> findByIsActive(Boolean isActive) {
+        return orderRepository.findByIsActive(isActive);
+    }
+
+    @Override
+    public Order findById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Order update(Order order) {
+        Order existingOrder = orderRepository.findById(order.getId()).orElse(null);
+        if(existingOrder != null) {
+            order.setNote(existingOrder.getNote());
+            order.setIsActive(existingOrder.getIsActive());
+            order.setUser(existingOrder.getUser());
+            order.setPaymentRef(existingOrder.getPaymentRef());
+            return orderRepository.save(order);
+        }
+        return null;
+    }
+
+    @Override
     public Order createOrder(String email, Order order, String uuidPaymentRef) {
         User user = userRepository.findByEmail(email).orElse(null);
         Cart cart = cartRepository.findByUser(user).get();
         order.setUser(user);
         order.setOrderStatus(OrderStatus.PENDING);
         order.setPaymentRef(order.getPaymentMethod().equals(PaymentMethod.COD) ? "UNKNOWN": uuidPaymentRef);
+        order.setIsActive(true);
         // Tao order //
         Order saveOrder = orderRepository.save(order);
         // Tạo danh sách các orderDetail //
@@ -59,4 +87,27 @@ public class OrderService implements IOrderService {
         }
         return null;
     }
+
+    @Override
+    public void delete(Long id) {
+        Order existingOrder = orderRepository.findById(id).orElse(null);
+        if(existingOrder != null) {
+            existingOrder.setIsActive(false);
+        }
+    }
+
+    @Override
+    public int getTotalOrders() {
+        return orderRepository.getTotalOrders();
+    }
+
+    @Override
+    public List<Order> findTopOrdersByOrderDate(int pageNo, int pageSize, String orderDate) {
+        Sort sort = Sort.by(Sort.Direction.DESC, orderDate);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        List<Order> orders = orderRepository.findAll(pageable).getContent();
+        return orders;
+    }
+
+
 }

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/fragments/layout::view(~{::title},~{::main})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+    <main>
+        <h1>Account Management</h1>
+        <ul class="d-flex p-0">
+            <li><a href="/admin/dashboard" class="active">Home</a></li>
+            &nbsp // &nbsp
+            <li>Order</li>
+        </ul>
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" th:object="${order}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="mb-3 d-none">
+                        <label for="id" class="form-label">Id:</label> <input type="text" class="form-control d-none"
+                                                                              id="id"
+                                                                              th:field="*{id}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Fullname:</label> <input type="text" class=""
+                                                                                  id="fullName"
+                                                                                  placeholder="Enter fullName..."
+                                                                                  th:field="*{fullname}"
+                                                                                  th:classappend="@{|form-control ${#fields.hasErrors('fullname') ? 'is-invalid' : ''}|}">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('fullname')}">
+                            <span th:errors="*{fullname}">Error message</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label> <input type="text"
+                                                                                    id="email" th:field="*{email}"
+                                                                                    th:classappend="@{|form-control ${#fields.hasErrors('email') ? 'is-invalid' : ''}|}"
+                                                                                    placeholder="Enter email...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}">
+                            <span th:errors="*{email}">Error message</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone number:</label>
+                        <input type="text"
+                               th:classappend="@{|form-control ${#fields.hasErrors('phoneNumber') ? 'is-invalid' : ''}|}"
+                               id="phoneNumber"
+                               th:field="*{phoneNumber}"
+                               placeholder="Enter phone number...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}">
+                            <span th:errors="*{phoneNumber}">Error message</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Shipping Address:</label>
+                        <input type="text"
+                               th:classappend="@{|form-control ${#fields.hasErrors('shippingAddress') ? 'is-invalid' : ''}|}"
+                               id="address"
+                               th:field="*{shippingAddress}"
+                               placeholder="Enter shipping address...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('shippingAddress')}">
+                            <span th:errors="*{shippingAddress}">Error message</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <select class="form-select" th:field="*{shippingMethod}"  th aria-label="Default select example">
+                            <option value="" selected>Open this select shipping method</option>
+                            <th:block th:each="item : ${shippingMethods}">
+                                <option th:value="${item.name}">[[${item}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <select class="form-select" th:field="*{orderStatus}"  th aria-label="Default select example">
+                            <option value="" selected>Open this select shipping method</option>
+                            <th:block th:each="item : ${ordersStatus}">
+                                <option th:value="${item.name}">[[${item}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <p class="text-danger" th:text="${msg}"></p>
+                    <div class="action mt-3">
+                        <button class="btn btn-primary text-white me-2" th:formaction="@{|/admin/order/create|}">Create</button>
+                        <button class="btn btn-warning text-white me-2" th:formaction="@{|/admin/order/update|}">Update</button>
+                        <a class="btn btn-danger me-2"
+                           th:href="@{|/admin/order/delete/*{id}|}">Delete</a>
+                        <a class="btn btn-info text-white" th:href="@{|/admin/order/index|}">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="recent-orders">
+            <h1>Recent Order</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>FullName</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Shipping Address</th>
+                    <th>Shipping Method</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order: ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.fullname}">Iphone 15 Promax</td>
+                    <td th:text="${order.email}">5000 $</td>
+                    <td th:text="${order.phoneNumber}">Còn Hàng</td>
+                    <td th:text="${order.shippingAddress}">Còn Hàng</td>
+                    <td th:text="${order.shippingMethod}">Còn Hàng</td>
+                    <td th:text="${order.orderStatus}">Còn Hàng</td>
+                    <td class="edit-product"><a th:href="@{|/admin/order/edit/${order.id}|}"
+                                                class="warning">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>s
+</body>
+</html>

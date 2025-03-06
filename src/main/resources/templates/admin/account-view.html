@@ -36,17 +36,6 @@
                             <span th:errors="*{email}">Error message</span>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="phoneNumber" class="form-label">Phone number:</label>
-                        <input type="text"
-                               th:classappend="@{|form-control ${#fields.hasErrors('phoneNumber') ? 'is-invalid' : ''}|}"
-                               id="phoneNumber"
-                               th:field="*{phoneNumber}"
-                               placeholder="Enter phone number...">
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}">
-                            <span th:errors="*{phoneNumber}">Error message</span>
-                        </div>
-                    </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Address:</label>
@@ -89,7 +78,7 @@
         <hr>
         <div class="recent-orders">
             <h1>Recent Account</h1>
-            <table>
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Id</th>

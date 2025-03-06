@@ -15,7 +15,7 @@ public interface IUserService {
     Integer createUser(User user);
     Integer updateUser(User user);
     Integer deleteUser(Integer userId, String email);
-
     User registerDTOToUser(RegisterDTO registerDTO);
+    int getTotalUsers();
 
 }

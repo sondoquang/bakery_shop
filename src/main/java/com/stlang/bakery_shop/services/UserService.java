@@ -96,4 +96,9 @@ public class UserService implements IUserService {
                 .build();
         return user;
     }
+
+    @Override
+    public int getTotalUsers() {
+        return userRepository.getTotalUsers();
+    }
 }

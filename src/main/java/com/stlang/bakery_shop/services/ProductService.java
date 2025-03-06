@@ -94,7 +94,10 @@ public class ProductService implements IProductService {
             return -1;
     }
 
-
+    @Override
+    public int getTotalProducts() {
+        return productRepository.getTotalProducts();
+    }
 
 
 }

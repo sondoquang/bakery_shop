@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -20,7 +21,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name="orders")
-public class Order {
+public class Order implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -44,10 +45,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    private long totalMoney;
 
     @NotNull
-    private boolean isActive;
+    private Boolean isActive;
 
     @Enumerated(EnumType.STRING)
     private ShippingMethod shippingMethod = ShippingMethod.Express_Shipping;
